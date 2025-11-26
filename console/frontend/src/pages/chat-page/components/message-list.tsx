@@ -62,6 +62,7 @@ const MessageList = (props: {
   const { bindTagClickEvent } = useBindEvents(lastClickedQA);
   const [previewFile, setPreviewFile] = useState<UploadFileInfo>(); //预览文件
   const [inputExample, setInputExample] = useState<string[]>([]);
+  const [prologue, setPrologue] = useState<string>('');
   // 选中的选项状态
   const [selectedOptionId, setSelectedOptionId] = useState<{
     id: number;
@@ -82,13 +83,14 @@ const MessageList = (props: {
   }, [messageList.length, streamId]);
 
   useEffect((): void => {
+    let advancedConfig: any = {};
     if (botInfo?.inputExample?.length > 0) {
       setInputExample(
         botInfo.inputExample?.filter(item => item.length > 0)?.slice(0, 3)
       );
     } else {
       try {
-        const advancedConfig = JSON.parse(botInfo?.advancedConfig || '{}');
+        advancedConfig = JSON.parse(botInfo?.advancedConfig || '{}');
         const inputExample = advancedConfig?.prologue?.inputExample;
         setInputExample(
           inputExample?.filter((item: string) => item.length > 0)?.slice(0, 3)
@@ -97,6 +99,12 @@ const MessageList = (props: {
         setInputExample([]);
       }
     }
+    setPrologue(
+      botInfo.prologue ||
+        botInfo.botDesc ||
+        advancedConfig?.prologue?.prologueText ||
+        ''
+    );
   }, [botInfo]);
 
   //渲染全新开始
@@ -113,15 +121,10 @@ const MessageList = (props: {
   // 渲染Header和推荐内容的函数 - 在column-reverse中需要反序渲染
   const renderHeaderAndRecommend = (): ReactElement => (
     <>
-      {(inputExample?.length > 0 ||
-        botInfo.botDesc?.trim().length > 0 ||
-        botInfo.prologue?.trim().length > 0) && (
+      {(inputExample?.length > 0 || prologue?.length > 0) && (
         <div className="p-6 pb-5 rounded-2xl bg-white/50 mt-8 w-[inherit]">
           <div className="text-lg font-medium text-gray-800 w-full">
-            <MarkdownRender
-              content={`👋Hi，${botInfo.prologue || botInfo.botDesc}`}
-              isSending={false}
-            />
+            <MarkdownRender content={`👋Hi，${prologue}`} isSending={false} />
           </div>
           {inputExample?.map((item: string, index: number) => (
             <div
