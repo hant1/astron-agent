@@ -101,8 +101,8 @@ const MessageList = (props: {
     }
     setPrologue(
       botInfo.prologue ||
-        botInfo.botDesc ||
         advancedConfig?.prologue?.prologueText ||
+        botInfo.botDesc ||
         ''
     );
   }, [botInfo]);
