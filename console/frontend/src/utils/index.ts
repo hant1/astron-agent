@@ -705,7 +705,7 @@ const getStatusText = (file: UploadFileInfo): string => {
  * 排除：代码块、emoji、链接、图片、markdown特殊语法等
  */
 const isPureText = (text: string): boolean => {
-  if (text?.length ?? 0) {
+  if (text.trim() === '') {
     return false;
   }
   if (!text || typeof text !== 'string') {
