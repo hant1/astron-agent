@@ -22,7 +22,8 @@ function index({
   function addCursorToLastElement(): void {
     // 清除之前的光标类
     const container = document.getElementById(globalMarkdownId);
-    const mdContainer = container?.querySelector('.global-markdown');
+    const mdContainer =
+      container?.querySelector('.global-markdown') || document.body;
     const previousCursor = mdContainer?.querySelector(
       '.global-markdown-flashing-cursor'
     );
@@ -31,7 +32,7 @@ function index({
     }
 
     // 获取最后一个子元素
-    const lastElement = getLastDeepestChild(mdContainer as Element);
+    const lastElement = getLastDeepestChild(mdContainer);
 
     if (lastElement) {
       lastElement.classList.add('global-markdown-flashing-cursor');
@@ -42,7 +43,7 @@ function index({
     while (element?.lastElementChild) {
       element = element?.lastElementChild;
       if (element?.textContent?.trim()) {
-        return element as Element;
+        return element;
       }
     }
     return element;
@@ -74,17 +75,8 @@ function index({
     </a>
   );
 
-  const ImageRenderer = (
-    props:
-      | React.ImgHTMLAttributes<HTMLImageElement>
-      | React.SVGProps<SVGImageElement>
-  ) => {
-    return (
-      <img
-        {...(props as React.ImgHTMLAttributes<HTMLImageElement>)}
-        style={{ maxWidth: '100%' }}
-      />
-    );
+  const ImageRenderer = (props: React.ImgHTMLAttributes<HTMLImageElement>) => {
+    return <img {...props} style={{ ...props.style, maxWidth: '100%' }} />;
   };
 
   // 作用域化样式函数
