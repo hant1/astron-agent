@@ -22,9 +22,11 @@ function index({
   function addCursorToLastElement(): void {
     // 清除之前的光标类
     const container = document.getElementById(globalMarkdownId);
-    const mdContainer =
-      container?.querySelector('.global-markdown') || document.body;
-    const previousCursor = mdContainer?.querySelector(
+    const mdContainer = container?.querySelector('.global-markdown');
+    if (!mdContainer) {
+      return;
+    }
+    const previousCursor = mdContainer.querySelector(
       '.global-markdown-flashing-cursor'
     );
     if (previousCursor) {
@@ -120,9 +122,11 @@ function index({
     // 从style标签中获取样式内容
     const styleContent = Array.isArray(children)
       ? children.join('')
-      : children || '';
+      : typeof children === 'string'
+        ? children
+        : '';
     // 添加作用域
-    const scopedStyles = scopeStyles(styleContent as string, 'markdown-body');
+    const scopedStyles = scopeStyles(styleContent, 'markdown-body');
 
     return <style {...rest}>{scopedStyles}</style>;
   };
