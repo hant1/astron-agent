@@ -225,8 +225,7 @@ const ChatPage = (): ReactElement => {
     }
     onSendMsg({
       msg: params.item,
-      workflowOperation:
-        Object.keys(workflowOperation || {}).length === 0 ? '' : 'resume',
+      workflowOperation: (workflowOperation || []).length === 0 ? '' : 'resume',
       onSendCallback: params.callback,
     });
   };
