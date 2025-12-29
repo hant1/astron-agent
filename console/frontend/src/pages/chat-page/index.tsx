@@ -57,6 +57,7 @@ const ChatPage = (): ReactElement => {
   const messageList = useChatStore(state => state.messageList); //  消息列表
   const streamId = useChatStore(state => state.streamId); //  流式id
   const isLoading = useChatStore(state => state.isLoading); //  加载状态
+  const workflowOperation = useChatStore(state => state.workflowOperation); //  工作流操作
   const setMessageList = useChatStore(state => state.setMessageList); //  设置消息列表
   const setCurrentChatId = useChatStore(state => state.setCurrentChatId); //  设置当前聊天id
   const initChatStore = useChatStore(state => state.initChatStore); //  初始化聊天store
@@ -224,6 +225,8 @@ const ChatPage = (): ReactElement => {
     }
     onSendMsg({
       msg: params.item,
+      workflowOperation:
+        Object.keys(workflowOperation || {}).length === 0 ? '' : 'resume',
       onSendCallback: params.callback,
     });
   };
